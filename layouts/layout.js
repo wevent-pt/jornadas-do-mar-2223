@@ -138,7 +138,7 @@ const Layout = ({
 </body>
 
 <style>
-  :root {
+  /* :root {
       --bg-color: #f6f6f6;
       --fg-color: #373530;
   }
@@ -235,7 +235,7 @@ const Layout = ({
   iframe {
       pointer-events: unset !important;
       /*add this so the embeds can be clickable*/
-  }
+  } */
 </style>`
   function createMarkup(c){
     return { __html: c };
