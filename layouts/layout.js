@@ -50,7 +50,7 @@ const Layout = ({
       var EmailSaved = localStorage.getItem("userEmailSaved");
       const apikey = "test-719a9ce7-f1d9-4044-bc09-783779c4f9bb"
       // If we don't find access token we open acess to do the login
-      if (AccessToken == null && ((window.location.href == "https://jornadasdomar.gq/log-in") || (window.location
+      if (AccessToken == null && ((window.location.href == "https://jornadasdomar.pedro.gq/log-in") || (window.location
               .href == "http://localhost:3000/log-in"))) {
           //add mojo div
           var mojoEl = document.createElement("div");
@@ -60,7 +60,7 @@ const Layout = ({
           document.body.appendChild(mojoEl);
           var mojoauth = new MojoAuth(apikey, {
               language: 'language_code',
-              redirect_url: "https://jornadasdomar.gq",
+              redirect_url: "https://jornadasdomar.pedro.gq",
               source: [{
                   type: "email",
                   feature: "magiclink"
@@ -75,7 +75,7 @@ const Layout = ({
               window.location.reload();
               return false;
           });
-      } else if (AccessToken != null && ((window.location.href == "https://jornadasdomar.gq/log-in") || (window
+      } else if (AccessToken != null && ((window.location.href == "https://jornadasdomar.pedro.gq/log-in") || (window
               .location.href == "http://localhost:3000/log-in"))) {
           //has token, lets see if its valid if not, we remove the token and reload the page
           var mojoauth = new MojoAuth(apikey);
@@ -110,7 +110,7 @@ const Layout = ({
               console.log("URL changed from " + previousUrl + " to " + window.location.href);
               previousUrl = window.location.href;
               // do your thing
-              if ((window.location.href != "https://jornadasdomar.gq/log-in") && (window.location.href !=
+              if ((window.location.href != "https://jornadasdomar.pedro.gq/log-in") && (window.location.href !=
                       "http://localhost:3000/log-in")) {
                   //remove mojo div
                   if (document.getElementById('mojoauth-passwordless-form')) {
