@@ -21,7 +21,105 @@ const Layout = ({
 }) => {
   const locale = useLocale()
   const router = useRouter()
-  const html = `<head>    <!-- live chat support -->    <script type="text/javascript">        window.$crisp = [];        window.CRISP_WEBSITE_ID = "7ebf4eb1-38f7-4c10-8fab-db71c20240ef";        (function () {            d = document;            s = d.createElement("script");            s.src = "https://client.crisp.chat/l.js";            s.async = 1;            d.getElementsByTagName("head")[0].appendChild(s);        })();    </script>    <!-- login and logout -->    <script charset="UTF-8" src="https://cdn.mojoauth.com/js/mojoauth.min.js"></script>    <script type="text/javascript">        function welcome() {            console.log("clicked");            localStorage.removeItem("userToken");            localStorage.removeItem("userEmailSaved");            window.location.reload();            return false;        }        var AccessToken = localStorage.getItem("userToken");        var EmailSaved = localStorage.getItem("userEmailSaved");        const apikey = "test-719a9ce7-f1d9-4044-bc09-783779c4f9bb"        // If we don't find access token we open acess to do the login        if (AccessToken == null && (window.location.href == "https://jornadasdomar.pedro.gq/log-in" || window.location                .href == "http://localhost:3000/log-in")) {            //add mojo div            var mojoEl = document.createElement("div");            mojoEl.setAttribute('id', 'mojoauth-passwordless-form');            mojoEl.setAttribute('style',                'background-color: cadetblue; width: 100%; height: 100%; position: absolute; top: 0;');            document.body.appendChild(mojoEl);            var mojoauth = new MojoAuth(apikey, {                language: 'language_code',                redirect_url: "https://jornadasdomar.pedro.gq",                source: [{                    type: "email",                    feature: "magiclink"                }],            })            mojoauth.signIn().then(response => {                console.log("signed in", response);                //console.log(response.oauth.access_token);                localStorage.setItem('userToken', response.oauth.access_token);                localStorage.setItem('userEmailSaved', response.user.email);                mojoEl.remove(); //remove element after login                window.location.reload();                return false;            });        } else if (AccessToken != null && (window.location.href == "https://jornadasdomar.pedro.gq/log-in" || window                .location.href == "http://localhost:3000/log-in")) {            //has token, lets see if its valid if not, we remove the token and reload the page            var mojoauth = new MojoAuth(apikey);            // Use verifyToken() for token verification            mojoauth.verifyToken(AccessToken).then(response => {                if (!response.isValid || response.isValid == false) {                    console.log("user not logged in");                    //remove credentials and reload                    localStorage.removeItem("userToken");                    localStorage.removeItem("userEmailSaved");                    window.location.reload();                    return false;                } else {                    console.log("valid log in, proceed", response);                    if (document.getElementById("mojoauth-passwordless-form")) {                        document.getElementById("mojoauth-passwordless-form").remove()                    };                    console.log("removed mojo aftyer verification");                }            });        } else if (document.getElementById('mojoauth-passwordless-form')) { //remove mojo            document.getElementById('mojoauth-passwordless-form').outerHTML = '';            console.log("removed mojo on simple else");        }        let previousUrl = "";        const observer = new MutationObserver(() => {            if (window.location.href !== previousUrl) {                console.log("URL changed from" + previousUrl + "to " + window.location.href);                previousUrl = window.location.href;                // do your thing                if (window.location.href == "https://jornadasdomar.pedro.gq/log-in" && window.location.href !=                    "http://localhost:3000/log-in") {                    //remove mojo div                    if (document.getElementById('mojoauth-passwordless-form')) {                        document.getElementById('mojoauth-passwordless-form').outerHTML = '';                        document.getElementById('mojoauth-login-container').outerHTML = '';                        document.getElementById("mojoauth-passwordless-form").remove();                        console.log("removed mojo event");                    }                }            }        });        const config = {            subtree: true,            childList: true        };        // start observing change        observer.observe(document, config);    </script></head><body>    <button onclick="welcome()"> Welcome to our website </button></body>`
+  const html = `<head>
+  <!-- live chat support -->
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "7ebf4eb1-38f7-4c10-8fab-db71c20240ef";
+    (function() {
+      d = document;
+      s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script> <!-- login and logout -->
+  <script charset="UTF-8" src="https://cdn.mojoauth.com/js/mojoauth.min.js"></script>
+  <script type="text/javascript">
+    function welcome() {
+      console.log("clicked");
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userEmailSaved");
+      window.location.reload();
+      return false;
+    }
+    var AccessToken = localStorage.getItem("userToken");
+    var EmailSaved = localStorage.getItem("userEmailSaved");
+    const apikey = "test-719a9ce7-f1d9-4044-bc09-783779c4f9bb" /* If we don't find access token we open acess to do the login */
+    if (AccessToken == null && (window.location.href == "https://jornadasdomar.pedro.gq/log-in" || window.location
+        .href == "http://localhost:3000/log-in")) {
+      /*add mojo div*/
+      var mojoEl = document.createElement("div");
+      mojoEl.setAttribute('id', 'mojoauth-passwordless-form');
+      mojoEl.setAttribute('style',
+        'background-color: cadetblue; width: 100%; height: 100%; position: absolute; top: 0;');
+      document.body.appendChild(mojoEl);
+      var mojoauth = new MojoAuth(apikey, {
+        language: 'language_code',
+        redirect_url: "https://jornadasdomar.pedro.gq",
+        source: [{
+          type: "email",
+          feature: "magiclink"
+        }],
+      });
+      mojoauth.signIn().then(response => {
+        console.log("signed in", response); /*console.log(response.oauth.access_token);*/
+        localStorage.setItem('userToken', response.oauth.access_token);
+        localStorage.setItem('userEmailSaved', response.user.email);
+        mojoEl.remove(); /*remove element after login */
+        window.location.reload();
+        return false;
+      });
+    } else if (AccessToken != null && (window.location.href == "https://jornadasdomar.pedro.gq/log-in" || window
+        .location.href == "http://localhost:3000/log-in")) {
+      /*has token, lets see if its valid if not, we remove the token and reload the page */
+      var mojoauth = new MojoAuth(apikey); /* Use verifyToken() for token verification */
+      mojoauth.verifyToken(AccessToken).then(response => {
+        if (!response.isValid || response.isValid == false) {
+          console.log("user not logged in"); /*remove credentials and reload */
+          localStorage.removeItem("userToken");
+          localStorage.removeItem("userEmailSaved");
+          window.location.reload();
+          return false;
+        } else {
+          console.log("valid log in, proceed", response);
+          if (document.getElementById("mojoauth-passwordless-form")) {
+            document.getElementById("mojoauth-passwordless-form").remove()
+          };
+          console.log("removed mojo aftyer verification");
+        }
+      });
+    } else if (document.getElementById('mojoauth-passwordless-form')) {
+      /*remove mojo*/
+      document.getElementById('mojoauth-passwordless-form').outerHTML = '';
+      console.log("removed mojo on simple else");
+    }
+    let previousUrl = "";
+    const observer = new MutationObserver(() => {
+      if (window.location.href !== previousUrl) {
+        console.log("URL changed from" + previousUrl + "to " + window.location.href);
+        previousUrl = window.location.href; /* do your thing */
+        if (window.location.href == "https://jornadasdomar.pedro.gq/log-in" && window.location.href !=
+          "http://localhost:3000/log-in") {
+          /*remove mojo div */
+          if (document.getElementById('mojoauth-passwordless-form')) {
+            document.getElementById('mojoauth-passwordless-form').outerHTML = '';
+            document.getElementById('mojoauth-login-container').outerHTML = '';
+            document.getElementById("mojoauth-passwordless-form").remove();
+            console.log("removed mojo event");
+          }
+        }
+      }
+    });
+    const config = {
+      subtree: true,
+      childList: true
+    }; /* start observing change */
+    observer.observe(document, config);
+  </script>
+</head>
+
+<body> <button onclick="welcome()"> Welcome to our website </button></body>`
   function createMarkup(c){
     return { __html: c };
   }
